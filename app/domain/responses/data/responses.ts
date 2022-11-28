@@ -1,0 +1,15 @@
+export const allResponses = () => [
+    { id: 1, data: 'a' },
+    { id: 2, data: 'b' },
+    { id: 3, data: 'c' },
+    { id: 4, data: 'd' },
+    { id: 5, data: 'e' },
+    { id: 6, data: 'f' },
+    { id: 7, data: 'g' },
+    { id: 8, data: 'h' },
+    { id: 9, data: 'i' },
+    { id: 10, data: 'j' },
+    { id: 11, data: 'k' },
+    { id: 12, data: 'l' },
+    { id: 13, data: 'm' },
+];
