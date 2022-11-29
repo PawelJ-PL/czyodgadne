@@ -1,9 +1,9 @@
-import { responsesEpic } from './../../../domain/responses/store/epics';
 import { configureStore } from '@reduxjs/toolkit';
 import { TypedUseSelectorHook, useDispatch, useSelector } from 'react-redux';
 import { Action, combineReducers } from 'redux';
 import { combineEpics, createEpicMiddleware } from 'redux-observable';
-import { responsesReducer } from '../../../domain/responses/store/reducers';
+import { responsesEpic } from '../../domain/responses/store/epics';
+import { responsesReducer } from '../../domain/responses/store/reducers';
 
 const rootReducer = combineReducers({
     responses: responsesReducer,

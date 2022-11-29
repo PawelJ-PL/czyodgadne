@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import { Text, View } from 'react-native';
 import { loadRemainingResponsesAction } from '../../domain/responses/store/actions';
-import { useAppDispatch, useAppSelector } from './store';
+import { useAppDispatch, useAppSelector } from '../store';
 
 const InitContainer: React.FC = () => {
     const dispatch = useAppDispatch();
