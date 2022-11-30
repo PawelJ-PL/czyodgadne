@@ -1,7 +1,8 @@
 import React, { useEffect } from 'react';
-import { Text, View } from 'react-native';
+import { View, Text } from 'react-native';
 import { loadRemainingResponsesAction } from '../../domain/responses/store/actions';
 import { useAppDispatch, useAppSelector } from '../store';
+import FullScreenLoader from './FullScreenLoader';
 
 const InitContainer: React.FC = () => {
     const dispatch = useAppDispatch();
@@ -13,7 +14,8 @@ const InitContainer: React.FC = () => {
     }, [dispatch]);
 
     return (
-        <View>
+        <View style={{}}>
+            <FullScreenLoader />
             <Text>{JSON.stringify(remianingResponse, undefined, 4)}</Text>
         </View>
     );
