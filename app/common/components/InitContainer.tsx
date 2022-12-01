@@ -1,8 +1,9 @@
 import React, { useEffect } from 'react';
-import { View, Text, ScrollView } from 'react-native';
+import { View, Text } from 'react-native';
 import { loadRemainingQuestionsAction } from '../../domain/questions/store/actions';
 import { loadRemainingResponsesAction } from '../../domain/responses/store/actions';
 import { useAppDispatch, useAppSelector } from '../store';
+import FatalErrorScreen from './FatalErrorScreen';
 import FullScreenLoader from './FullScreenLoader';
 
 const InitContainer: React.FC = () => {
@@ -16,15 +17,19 @@ const InitContainer: React.FC = () => {
         dispatch(loadRemainingQuestionsAction.started());
     }, [dispatch]);
 
-    return (
-        <View style={{}}>
-            <ScrollView>
-                {/* <FullScreenLoader /> */}
-                <Text>{JSON.stringify(remianingResponse, undefined, 4)}</Text>
-                <Text>{JSON.stringify(remainingQuestions, undefined, 4)}</Text>
-            </ScrollView>
-        </View>
-    );
+    if (remainingQuestions.status === 'FINISHED' && remianingResponse.status === 'FINISHED') {
+        return (
+            <View>
+                <Text>{JSON.stringify(remianingResponse)}</Text>
+            </View>
+        );
+    } else if (remainingQuestions.status === 'FAILED') {
+        return <FatalErrorScreen />;
+    } else if (remianingResponse.status === 'FAILED') {
+        return <FatalErrorScreen />;
+    } else {
+        return <FullScreenLoader />;
+    }
 };
 
 export default InitContainer;
