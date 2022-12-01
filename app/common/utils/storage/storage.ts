@@ -14,3 +14,7 @@ export const setItem = async <T>(key: string, value: T) => {
     const stringified = JSON.stringify(value);
     await AsyncStorage.setItem(key, stringified);
 };
+
+export const removeItem = async (key: string) => {
+    await AsyncStorage.removeItem(key);
+};

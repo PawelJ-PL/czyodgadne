@@ -1,4 +1,17 @@
 export const allQuestions = () => [
     { id: 1, question: 'Czy???', answers: { yes: [1, 3], no: [2, 4], depends: [5] } },
     { id: 2, question: 'Czy???', answers: { yes: [2, 4], no: [5], depends: [1, 3] } },
+    { id: 3, question: 'Czy???', answers: { yes: [2, 4], no: [5], depends: [1, 3] } },
+    { id: 4, question: 'Czy???', answers: { yes: [2, 4], no: [5], depends: [1, 3] } },
+    { id: 5, question: 'Czy???', answers: { yes: [2, 4], no: [5], depends: [1, 3] } },
+    { id: 6, question: 'Czy???', answers: { yes: [2, 4], no: [5], depends: [1, 3] } },
+    { id: 7, question: 'Czy???', answers: { yes: [2, 4], no: [5], depends: [1, 3] } },
+    { id: 8, question: 'Czy???', answers: { yes: [2, 4], no: [5], depends: [1, 3] } },
+    { id: 9, question: 'Czy???', answers: { yes: [2, 4], no: [5], depends: [1, 3] } },
+    { id: 10, question: 'Czy???', answers: { yes: [2, 4], no: [5], depends: [1, 3] } },
+    { id: 11, question: 'Czy???', answers: { yes: [2, 4], no: [5], depends: [1, 3] } },
+    { id: 12, question: 'Czy???', answers: { yes: [2, 4], no: [5], depends: [1, 3] } },
+    { id: 13, question: 'Czy???', answers: { yes: [2, 4], no: [5], depends: [1, 3] } },
+    { id: 14, question: 'Czy???', answers: { yes: [2, 4], no: [5], depends: [1, 3] } },
+    { id: 15, question: 'Czy???', answers: { yes: [2, 4], no: [5], depends: [1, 3] } },
 ];

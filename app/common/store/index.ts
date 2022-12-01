@@ -1,3 +1,5 @@
+import { questionsEpics } from './../../domain/questions/store/epics';
+import { questionsReducer } from './../../domain/questions/store/reducers';
 import { configureStore } from '@reduxjs/toolkit';
 import { TypedUseSelectorHook, useDispatch, useSelector } from 'react-redux';
 import { Action, combineReducers } from 'redux';
@@ -7,9 +9,10 @@ import { responsesReducer } from '../../domain/responses/store/reducers';
 
 const rootReducer = combineReducers({
     responses: responsesReducer,
+    questions: questionsReducer,
 });
 
-const rootEpic = combineEpics(responsesEpic);
+const rootEpic = combineEpics(responsesEpic, questionsEpics);
 
 export type ApplicationState = ReturnType<typeof rootReducer>;
 
