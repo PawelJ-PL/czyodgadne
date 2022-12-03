@@ -24,9 +24,9 @@ const InitContainer: React.FC = () => {
             </View>
         );
     } else if (remainingQuestions.status === 'FAILED') {
-        return <FatalErrorScreen />;
+        return <FatalErrorScreen error={remainingQuestions.error} />;
     } else if (remianingResponse.status === 'FAILED') {
-        return <FatalErrorScreen />;
+        return <FatalErrorScreen error={remianingResponse.error} />;
     } else {
         return <FullScreenLoader />;
     }

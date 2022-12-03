@@ -65,7 +65,6 @@ const setNextAsCurrent = async (): Promise<Question[]> => {
 };
 
 const loadRemainingQuestionsEpic = createEpic(loadRemainingQuestionsAction, async () => {
-    return Promise.reject(new Error('XXXXXXXXXXXx'));
     const currentQuestions = await getItem(CURRENT_CHUNK_KEY, questionSchema.array());
     if (currentQuestions && currentQuestions.length > 0) {
         return currentQuestions;
