@@ -1,6 +1,6 @@
 import { allResponses } from './../data/responses';
 import { combineEpics } from 'redux-observable';
-import { loadRemainingResponsesAction } from './actions';
+import { loadRemainingResponsesAction, saveRemainingResponsesAction } from './actions';
 import { Action } from 'redux';
 import { delayedPromise } from '../../../common/utils/delayedPromise';
 import { getItem, setItem } from '../../../common/utils/storage/storage';
@@ -34,4 +34,11 @@ const loadRemainingResponsesEpic = createEpic(loadRemainingResponsesAction, asyn
     return storedResponses;
 });
 
-export const responsesEpic = combineEpics<Action, Action, ApplicationState>(loadRemainingResponsesEpic);
+const saveRemainingResponsesEpic = createEpic(saveRemainingResponsesAction, (responses) =>
+    setItem(STORED_RESPONSES_KEY, responses),
+);
+
+export const responsesEpic = combineEpics<Action, Action, ApplicationState>(
+    loadRemainingResponsesEpic,
+    saveRemainingResponsesEpic,
+);

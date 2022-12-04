@@ -1,14 +1,21 @@
+import { saveRemainingResponsesAction } from './../../responses/store/actions';
 import { delayedPromise } from './../../../common/utils/delayedPromise';
 import { allQuestions } from './../data/questions';
 import { Question, questionSchema } from './../types/question';
 import { getItem, removeItem, setItem } from './../../../common/utils/storage/storage';
-import { combineEpics } from 'redux-observable';
-import { loadRemainingQuestionsAction } from './actions';
+import { combineEpics, Epic } from 'redux-observable';
+import { answerQuestionAction, loadRemainingQuestionsAction, saveRemainingQuestionsAction } from './actions';
 import { createEpic } from './../../../common/store/async/AsyncEpic';
 import { z } from 'zod';
 import splitEvery from 'ramda/src/splitEvery';
 import { NoMoreQuestionsError } from '../types/errors';
 import { v4 as uuidv4 } from 'uuid';
+import partition from 'ramda/src/partition';
+import intersection from 'ramda/src/intersection';
+import difference from 'ramda/src/difference';
+import { AnyAction } from 'redux';
+import { ApplicationState } from '../../../common/store';
+import { EMPTY, filter, mergeMap, of } from 'rxjs';
 
 const CHUNKS_LIST_KEY = 'questionsChunks';
 const CURRENT_CHUNK_KEY = 'currentQuestionChunk';
@@ -75,4 +82,39 @@ const loadRemainingQuestionsEpic = createEpic(loadRemainingQuestionsAction, asyn
     }
 });
 
-export const questionsEpics = combineEpics(loadRemainingQuestionsEpic);
+const saveRemainingQuestionsEpic = createEpic(saveRemainingQuestionsAction, (questions) =>
+    setItem(CURRENT_CHUNK_KEY, questions),
+);
+
+const answerQuestionEpic: Epic<AnyAction, AnyAction, ApplicationState> = (action$, state$) =>
+    action$.pipe(
+        filter(answerQuestionAction.match),
+        mergeMap((action) => {
+            if (
+                state$.value.questions.remainingQuestions.status !== 'FINISHED' ||
+                state$.value.responses.remainingResponses.status !== 'FINISHED'
+            ) {
+                return EMPTY;
+            }
+            const [matchingQuestions, nonMatchingQuestions] = partition<Question>(
+                (q) => q.id === action.payload.questionId,
+            )(state$.value.questions.remainingQuestions.data);
+            const storeQuestionsAction =
+                nonMatchingQuestions.length > 0
+                    ? saveRemainingQuestionsAction.started(nonMatchingQuestions)
+                    : loadRemainingQuestionsAction.started();
+            const updatedResponses =
+                action.payload.answer === 'yes'
+                    ? intersection<number>(
+                          state$.value.responses.remainingResponses.data,
+                          matchingQuestions[0].answers.yes,
+                      )
+                    : difference<number>(
+                          state$.value.responses.remainingResponses.data,
+                          matchingQuestions[0].answers.yes,
+                      );
+            return of(saveRemainingResponsesAction.started(updatedResponses), storeQuestionsAction);
+        }),
+    );
+
+export const questionsEpics = combineEpics(loadRemainingQuestionsEpic, answerQuestionEpic, saveRemainingQuestionsEpic);
