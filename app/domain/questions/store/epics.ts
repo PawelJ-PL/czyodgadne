@@ -99,10 +99,7 @@ const answerQuestionEpic: Epic<AnyAction, AnyAction, ApplicationState> = (action
             const [matchingQuestions, nonMatchingQuestions] = partition<Question>(
                 (q) => q.id === action.payload.questionId,
             )(state$.value.questions.remainingQuestions.data);
-            const storeQuestionsAction =
-                nonMatchingQuestions.length > 0
-                    ? saveRemainingQuestionsAction.started(nonMatchingQuestions)
-                    : loadRemainingQuestionsAction.started();
+            const storeQuestionsAction = saveRemainingQuestionsAction.started(nonMatchingQuestions);
             const updatedResponses =
                 action.payload.answer === 'yes'
                     ? intersection<number>(
@@ -117,4 +114,20 @@ const answerQuestionEpic: Epic<AnyAction, AnyAction, ApplicationState> = (action
         }),
     );
 
-export const questionsEpics = combineEpics(loadRemainingQuestionsEpic, answerQuestionEpic, saveRemainingQuestionsEpic);
+const loadQuestionWhenSavedEmptyListEpic: Epic<AnyAction, AnyAction, ApplicationState> = (action$) =>
+    action$.pipe(
+        filter(saveRemainingQuestionsAction.done.match),
+        mergeMap((action) => {
+            if (action.payload.params.length > 0) {
+                return EMPTY;
+            }
+            return of(loadRemainingQuestionsAction.started());
+        }),
+    );
+
+export const questionsEpics = combineEpics(
+    loadRemainingQuestionsEpic,
+    answerQuestionEpic,
+    saveRemainingQuestionsEpic,
+    loadQuestionWhenSavedEmptyListEpic,
+);

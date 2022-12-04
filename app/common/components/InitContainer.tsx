@@ -1,6 +1,8 @@
 import React, { useEffect } from 'react';
+import { Text } from 'react-native';
 import AskQuestionContainer from '../../domain/questions/components/AskQuestionContainer';
 import { loadRemainingQuestionsAction } from '../../domain/questions/store/actions';
+import { allResponses } from '../../domain/responses/data/responses';
 import { loadRemainingResponsesAction } from '../../domain/responses/store/actions';
 import { useAppDispatch, useAppSelector } from '../store';
 import FatalErrorScreen from './FatalErrorScreen';
@@ -17,7 +19,9 @@ const InitContainer: React.FC = () => {
         dispatch(loadRemainingQuestionsAction.started());
     }, [dispatch]);
 
-    if (
+    if (remainingResponse.status === 'FINISHED' && remainingResponse.data.length === 1) {
+        return <Text>{allResponses().find((r) => r.id === remainingResponse.data[0])?.name}</Text>;
+    } else if (
         remainingQuestions.status === 'FINISHED' &&
         remainingResponse.status === 'FINISHED' &&
         remainingQuestions.data.length > 0
