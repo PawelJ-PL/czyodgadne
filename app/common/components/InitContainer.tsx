@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { View, Text } from 'react-native';
+import AskQuestionContainer from '../../domain/questions/components/AskQuestionContainer';
 import { loadRemainingQuestionsAction } from '../../domain/questions/store/actions';
 import { loadRemainingResponsesAction } from '../../domain/responses/store/actions';
 import { useAppDispatch, useAppSelector } from '../store';
@@ -9,7 +9,7 @@ import FullScreenLoader from './FullScreenLoader';
 const InitContainer: React.FC = () => {
     const dispatch = useAppDispatch();
 
-    const remianingResponse = useAppSelector((s) => s.responses.remainingResponses);
+    const remainingResponse = useAppSelector((s) => s.responses.remainingResponses);
     const remainingQuestions = useAppSelector((s) => s.questions.remainingQuestions);
 
     useEffect(() => {
@@ -17,16 +17,16 @@ const InitContainer: React.FC = () => {
         dispatch(loadRemainingQuestionsAction.started());
     }, [dispatch]);
 
-    if (remainingQuestions.status === 'FINISHED' && remianingResponse.status === 'FINISHED') {
-        return (
-            <View>
-                <Text>{JSON.stringify(remianingResponse)}</Text>
-            </View>
-        );
+    if (
+        remainingQuestions.status === 'FINISHED' &&
+        remainingResponse.status === 'FINISHED' &&
+        remainingQuestions.data.length > 0
+    ) {
+        return <AskQuestionContainer questions={remainingQuestions.data} />;
     } else if (remainingQuestions.status === 'FAILED') {
         return <FatalErrorScreen error={remainingQuestions.error} />;
-    } else if (remianingResponse.status === 'FAILED') {
-        return <FatalErrorScreen error={remianingResponse.error} />;
+    } else if (remainingResponse.status === 'FAILED') {
+        return <FatalErrorScreen error={remainingResponse.error} />;
     } else {
         return <FullScreenLoader />;
     }

@@ -5,13 +5,14 @@ import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { Provider } from 'react-redux';
 import InitContainer from './app/common/components/InitContainer';
 import { store } from './app/common/store';
+import theme from './app/common/theme/default';
 
 const App = () => {
     return (
         <Provider store={store}>
             <SafeAreaView style={styles.container}>
                 <SafeAreaProvider>
-                    <ThemeProvider>
+                    <ThemeProvider theme={theme}>
                         <StatusBar hidden={true} />
                         <InitContainer />
                     </ThemeProvider>

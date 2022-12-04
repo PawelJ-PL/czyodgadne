@@ -5,9 +5,8 @@ export const questionSchema = z.object({
     question: z.string(),
     answers: z.object({
         yes: z.number().array(),
-        no: z.number().array(),
-        depends: z.number().array(),
     }),
+    excludes: z.number().array().optional(),
 });
 
 export type Question = z.infer<typeof questionSchema>;
